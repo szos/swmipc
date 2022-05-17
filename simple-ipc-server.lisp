@@ -90,7 +90,7 @@
                       *connection-cleanup-actions*))
     (unwind-protect (read-and-dispatch-request stream)
       (cleanup-after-connection)
-      (format stream "~C" (code-char 23))
+      (format stream "~C" #\ETB)
       (ignore-errors (finish-output stream))
       (format t "Ending connection~&")
       (finish-output))))

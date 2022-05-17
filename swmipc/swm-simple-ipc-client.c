@@ -6,7 +6,8 @@
 #include <readline/history.h>
 #endif
 
-#define TERMINATE_READ_DELIMITER 4
+#define TERMINATE_READ_DELIMITER 4 /* end of transmission */
+#define TERMINATE_CONNECTION_DELIMITER 23 /* end of transmission block */
 
 #define FORMAT_SWM(s) do {                      \
     if (SUPPRESS_OUTPUT == 0) {                 \
@@ -383,7 +384,7 @@ int main (int argc, char **argv) {
   }
 
   write(sock, "(:end-connection) ", strlen("(:end-connection) "));
-  buf = read_from_socket(sock, 23);
+  buf = read_from_socket(sock, TERMINATE_CONNECTION_DELIMITER);
   format_verbose(2, stdout, "%s", buf);
   close(sock);
   free(buf);
