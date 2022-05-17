@@ -42,3 +42,11 @@ A simple IPC server for StumpWM
      ...
      $ cat one-cmd-per-line.txt | swmipc -c "echo Running commands from file" -
    #+end_src
+   
+** Notification Script
+   An example notification script:
+   #+begin_src sh
+     #!/bin/sh
+     txt="^[^3NOTIFICATION:^] $@"
+     swmipc -fc "echo $txt"
+   #+end_src
