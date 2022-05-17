@@ -1,0 +1,44 @@
+#+TITLE: StumpWM IPC
+
+A simple IPC server for StumpWM
+
+* Description
+  This is a simple IPC server for StumpWM, with an accompanying C client. This
+  was written mainly to make myself familiar with unix domain sockets; StumpWM
+  already has an IPC method based upon X11 atoms.
+
+* Building
+  The lisp server can be quickloaded, and the server started with the function
+  ~#'simple-ipc-server:start-server~. The client can be built by the usual
+  ~./autogen.sh~ ~./configure~ ~make~ ~make install~. After building, run
+  ~swmipc --help~ for a list of options and their descriptions. 
+  
+* Usage
+  The ~swmipc~ executable can send commands to be executed as well as lisp forms
+  to be evaluated. To evaluate lisp forms the variable
+  ~simple-ipc-server:*allow-evaluation*~ must be ~T~. There is also an
+  interactive mode which reads input from the user and sends the appropriate
+  request.
+
+  When reading commands from stdin every line is treated as a single command
+  invocation.
+
+  During evaluation, standard output is bound to the socket stream, and printing
+  to standard output will print back to swmipc.
+
+** Examples
+   #+begin_src sh
+     $ swmipc -c echo-date "gnew mygroup"
+     Tue May 17 2022  7:18:05
+     $ swmipc -fi
+     swmipc> echo-windows
+      0*St
+     swmipc> echo ^1Hi
+     Hi
+     swmipc> ^D
+     $ swmipc -fi
+     swmipc> swmipc quit
+     $ cat forms.lisp | swmipc -e -
+     ...
+     $ cat one-cmd-per-line.txt | swmipc -c "echo Running commands from file" -
+   #+end_src
